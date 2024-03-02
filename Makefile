@@ -1,32 +1,44 @@
-# Makefile for compiling and running COBOL programs using GnuCOBOL (cobc)
+# Makefile for compiling COBOL programs using GnuCOBOL (cobc)
 
 # Compiler settings
 COBC := cobc
 COBCFLAGS := -x -free -Wall
+LIBFLAGS := -m -free -Wall # For compiling shared libraries
 
-# Find all COBOL program source files in the current directory
-SRC := $(wildcard *.cbl)
+# Directories
+SRCDIR := src
+BINDIR := bin
 
-# Target executable names are derived from the source file names
-EXE := $(SRC:.cbl=)
+# Phony targets for build and run commands
+.PHONY: all clean run_hello_world run_hello_world_dynamic hello_world hello_world_dynamic
 
-.PHONY: all clean run
+all: hello_world hello_world_dynamic
 
-# Default target: compile all programs
-all: $(EXE)
-
-# Rule for compiling COBOL programs
-%: %.cbl
+# Build the simple hello_world program
+hello_world: $(BINDIR)/hello_world
+$(BINDIR)/hello_world: $(SRCDIR)/hello_world.cbl
+	@mkdir -p $(BINDIR)
 	$(COBC) $(COBCFLAGS) $< -o $@
 
-# Rule for running all compiled programs (optional, depending on your needs)
-run: $(EXE)
-	@for program in $^ ; do \
-		echo Running $$program... ; \
-		./$$program ; \
-	done
+# Build the hello_world_dynamic program and its dependency, the hello_lib
+hello_world_dynamic: $(BINDIR)/hello_world_dynamic
+$(BINDIR)/hello_world_dynamic: $(SRCDIR)/hello_world_dynamic.cbl $(BINDIR)/libhello_lib.so
+	@mkdir -p $(BINDIR)
+	$(COBC) $(COBCFLAGS) $< -o $@ -L$(BINDIR) -lhello_lib
 
-# Clean up compiled executables
+# Build the hello_lib shared library
+$(BINDIR)/libhello_lib.so: $(SRCDIR)/hello_lib.cbl
+	@mkdir -p $(BINDIR)
+	$(COBC) $(LIBFLAGS) $< -o $@
+
+# Run the simple hello_world program
+run_hello_world: hello_world
+	@./$(BINDIR)/hello_world
+
+# Run the hello_world_dynamic program, ensuring the dynamic linker can find the shared library
+run_hello_world_dynamic: hello_world_dynamic
+	@LD_LIBRARY_PATH=$(BINDIR) ./$(BINDIR)/hello_world_dynamic
+
+# Clean the bin directory
 clean:
-	rm -f $(EXE)
-
+	rm -f $(BINDIR)/*
