@@ -42,4 +42,7 @@
            on overflow
                display 'Error: Record too long or too many fields'
            end-unstring
-           display 'ID: ' fileID ', Name: ' fileName ', Age: ' fileAge.
+
+           display 'ID: ' function trim(fileID)
+                   ', Name: ' function trim(fileName)
+                   ', Age: ' fileAge.
