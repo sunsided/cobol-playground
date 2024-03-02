@@ -1,5 +1,7 @@
 # Exploring COBOL: A playground project
 
+[![Build COBOL programs](https://github.com/sunsided/cobol-playground/actions/workflows/build.yml/badge.svg)](https://github.com/sunsided/cobol-playground/actions/workflows/build.yml)
+
 <div align="center">
     <img alt="Dinosaurs programming COBOL" src="docs/dinos.jpg" />
 </div>
