@@ -2,7 +2,7 @@
 
 # Compiler settings
 COBC := cobc
-COBCFLAGS := -x -Wall
+COBCFLAGS := -x -free -Wall
 
 # Find all COBOL program source files in the current directory
 SRC := $(wildcard *.cbl)
