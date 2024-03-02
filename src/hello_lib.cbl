@@ -7,5 +7,5 @@
 
        procedure division using GREETING.
        DisplayHello.
-           display GREETING ' from COBOL.'.
+           display function trim(GREETING) ' from COBOL.'.
            goback.
