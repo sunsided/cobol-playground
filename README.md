@@ -1,4 +1,4 @@
-# 🛝🦕 COBOL Playground
+# Exploring COBOL: A playground project
 
 <div align="center">
     <img alt="Dinosaurs programming COBOL" src="docs/dinos.jpg" />
