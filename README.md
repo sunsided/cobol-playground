@@ -1,5 +1,9 @@
 # 🛝🦕 COBOL Playground
 
+<div align="center">
+    <img alt="Dinosaurs programming COBOL" src="docs/dinos.jpg" />
+</div>
+
 ## Get going
 
 Install the GnuCOBOL (`gnucobol`/`cobc`) compiler, then compile and run the examples.
