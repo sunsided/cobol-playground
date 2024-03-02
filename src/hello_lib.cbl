@@ -1,7 +1,11 @@
        identification division.
        program-id. HelloLib.
 
-       procedure division.
-           DisplayHelloWorld.
-               display "Hello, World! from COBOL Library."
-               goback.
+       data division.
+       linkage section.
+           01 GREETING PIC X(255).
+
+       procedure division using GREETING.
+       DisplayHello.
+           display GREETING ' from COBOL.'.
+           goback.

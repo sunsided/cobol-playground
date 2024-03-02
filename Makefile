@@ -1,44 +1,40 @@
-# Makefile for compiling COBOL programs using GnuCOBOL (cobc)
+# Makefile for building COBOL driver and library.
 
-# Compiler settings
-COBC := cobc
-COBCFLAGS := -x -free -Wall
-LIBFLAGS := -m -free -Wall # For compiling shared libraries
+# Compiler and flags
+COBC=cobc
+CFLAGS=-free
+LIBFLAGS=-m
+EXEFLAGS=-x
 
 # Directories
-SRCDIR := src
-BINDIR := bin
+SRC_DIR=src
+BIN_DIR=bin
 
-# Phony targets for build and run commands
-.PHONY: all clean run_hello_world run_hello_world_dynamic hello_world hello_world_dynamic
+# Source files
+LIB_SOURCE=$(SRC_DIR)/hello_lib.cbl
+DRIVER_SOURCE=$(SRC_DIR)/hello_driver.cbl
 
-all: hello_world hello_world_dynamic
+# Output
+LIB_OUTPUT=$(BIN_DIR)/HelloLib
+DRIVER_OUTPUT=$(BIN_DIR)/hello_driver
 
-# Build the simple hello_world program
-hello_world: $(BINDIR)/hello_world
-$(BINDIR)/hello_world: $(SRCDIR)/hello_world.cbl
-	@mkdir -p $(BINDIR)
-	$(COBC) $(COBCFLAGS) $< -o $@
+# Default target
+.PHONY: all clean run
+all: $(DRIVER_OUTPUT)
 
-# Build the hello_world_dynamic program and its dependency, the hello_lib
-hello_world_dynamic: $(BINDIR)/hello_world_dynamic
-$(BINDIR)/hello_world_dynamic: $(SRCDIR)/hello_world_dynamic.cbl $(BINDIR)/libhello_lib.so
-	@mkdir -p $(BINDIR)
-	$(COBC) $(COBCFLAGS) $< -o $@ -L$(BINDIR) -lhello_lib
+# Compile the library
+$(LIB_OUTPUT): $(LIB_SOURCE)
+	@mkdir -p $(BIN_DIR)
+	$(COBC) $(CFLAGS) $(LIBFLAGS) -o $@ $<
 
-# Build the hello_lib shared library
-$(BINDIR)/libhello_lib.so: $(SRCDIR)/hello_lib.cbl
-	@mkdir -p $(BINDIR)
-	$(COBC) $(LIBFLAGS) $< -o $@
+# Compile the driver program and link with the library
+$(DRIVER_OUTPUT): $(DRIVER_SOURCE) $(LIB_OUTPUT)
+	$(COBC) $(CFLAGS) $(EXEFLAGS) -o $@ $(DRIVER_SOURCE)
 
-# Run the simple hello_world program
-run_hello_world: hello_world
-	@./$(BINDIR)/hello_world
+# Run the driver program
+run: $(DRIVER_OUTPUT)
+	export COB_LIBRARY_PATH=$(BIN_DIR) && ./$(DRIVER_OUTPUT)
 
-# Run the hello_world_dynamic program, ensuring the dynamic linker can find the shared library
-run_hello_world_dynamic: hello_world_dynamic
-	@LD_LIBRARY_PATH=$(BINDIR) ./$(BINDIR)/hello_world_dynamic
-
-# Clean the bin directory
+# Clean the build
 clean:
-	rm -f $(BINDIR)/*
+	rm -rf $(BIN_DIR)
