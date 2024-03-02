@@ -28,3 +28,11 @@ This is a bit more involved to build and run, so just use Make:
 ```shell
 make run_hello_driver
 ```
+
+### Example reading a CSV file
+
+This is a bit more involved to build and run, so just use Make:
+
+```shell
+make run_csv
+```
