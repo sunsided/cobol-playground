@@ -17,9 +17,9 @@
            88 eof                value 'Y'.
            88 notEof             value 'N'.
        01  fileRecord.
-           03 fileID       pic X(10).
-           03 fileName     pic X(20).
-           03 fileAge      pic 99.
+           02 fileID       pic X(10).
+           02 fileName     pic X(20).
+           02 fileAge      pic 99.
        01  fieldDelimiter  pic X value ','.
 
        procedure division.
