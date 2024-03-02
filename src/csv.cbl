@@ -43,6 +43,8 @@
                display 'Error: Record too long or too many fields'
            end-unstring
 
-           display 'ID: ' function trim(fileID)
-                   ', Name: ' function trim(fileName)
+           inspect fileID replacing trailing spaces by low-values
+           inspect fileName replacing trailing spaces by low-values
+           display 'ID: ' fileID
+                   ', Name: ' fileName
                    ', Age: ' fileAge.
